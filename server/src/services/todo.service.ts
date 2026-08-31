@@ -1,9 +1,8 @@
 import { Todo, ITodo } from '../models/Todo';
-import { FilterQuery } from 'mongoose';
 
 export class TodoService {
   async getTodos(filters: any) {
-    const query: FilterQuery<ITodo> = {};
+    const query: Record<string, any> = {};
 
     if (filters.search) {
       query.$or = [
