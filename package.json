@@ -1,0 +1,11 @@
+{
+  "name": "taskflow",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "concurrently \"cd server && bun dev\" \"cd client && bun dev\"",
+    "install:all": "bun install && cd server && bun install && cd ../client && bun install"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5"
+  }
+}
