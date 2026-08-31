@@ -14,12 +14,13 @@ A professional, minimal, and scalable full-stack Todo application built for the 
 - Lucide React
 
 ### Backend
-- Node.js + Express.js
-- TypeScript
-- MongoDB Atlas (via Mongoose)
-- Zod (Validation)
-- Helmet & CORS (Security)
-- Bun (Package Manager)
+- **Runtime**: Node.js
+- **Framework**: Express.js
+- **Language**: TypeScript
+- **Database**: MongoDB Atlas (via Mongoose)
+- **Validation**: Zod
+- **Security**: Helmet & CORS
+- **Package Manager**: Bun (used purely for dependency management and local dev script execution, the server itself runs seamlessly on Node.js as required)
 
 ## 📁 Project Structure
 
