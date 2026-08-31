@@ -27,7 +27,19 @@ export default function TodoModal({ isOpen, onClose }: { isOpen: boolean, onClos
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!title) return alert('Title is required');
-    mutation.mutate({ title, description, priority: priority as any, status: status as any, dueDate: dueDate || undefined });
+    
+    let formattedDate = undefined;
+    if (dueDate) {
+      formattedDate = new Date(dueDate).toISOString();
+    }
+    
+    mutation.mutate({ 
+      title, 
+      description: description || undefined, 
+      priority: priority as any, 
+      status: status as any, 
+      dueDate: formattedDate 
+    });
   };
 
   return (
