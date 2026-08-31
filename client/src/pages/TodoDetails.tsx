@@ -1,14 +1,20 @@
+import { useState } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { todoService } from '../services/api';
 import { format } from 'date-fns';
 import { ArrowLeft, Trash2, Edit2, CheckCircle, Clock } from 'lucide-react';
+import TodoModal from '../components/TodoModal';
+import DeleteModal from '../components/DeleteModal';
+import toast from 'react-hot-toast';
 
 export default function TodoDetails() {
   const [searchParams] = useSearchParams();
   const id = searchParams.get('id');
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const { data: todo, isLoading, isError } = useQuery({
     queryKey: ['todo', id],
@@ -20,15 +26,21 @@ export default function TodoDetails() {
     mutationFn: todoService.deleteTodo,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['todos'] });
+      toast.success('Todo deleted');
       navigate('/');
     },
   });
 
   const statusMutation = useMutation({
     mutationFn: (status: string) => todoService.updateTodo(id!, { status: status as any }),
-    onSuccess: () => {
+    onSuccess: (_, status) => {
       queryClient.invalidateQueries({ queryKey: ['todo', id] });
       queryClient.invalidateQueries({ queryKey: ['todos'] });
+      if (status === 'COMPLETED') {
+        toast.success('Marked complete');
+      } else {
+        toast.success('Todo updated');
+      }
     },
   });
 
@@ -105,23 +117,29 @@ export default function TodoDetails() {
           <div className="flex-1"></div>
 
           <button 
+            onClick={() => setIsEditModalOpen(true)}
             className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-colors"
           >
             <Edit2 size={18} /> Edit Task
           </button>
           
           <button 
-            onClick={() => {
-              if (confirm('Are you sure you want to delete this task? This cannot be undone.')) {
-                deleteMutation.mutate(todo._id);
-              }
-            }}
+            onClick={() => setIsDeleteModalOpen(true)}
             className="flex items-center gap-2 px-4 py-2 bg-white border border-red-200 text-red-600 rounded-lg hover:bg-red-50 font-medium transition-colors"
           >
             <Trash2 size={18} /> Delete
           </button>
         </div>
       </div>
+      {todo && <TodoModal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} todo={todo} />}
+      {todo && (
+        <DeleteModal 
+          isOpen={isDeleteModalOpen} 
+          onClose={() => setIsDeleteModalOpen(false)} 
+          onConfirm={() => deleteMutation.mutate(todo._id)} 
+          todoTitle={todo.title} 
+        />
+      )}
     </div>
   );
 }

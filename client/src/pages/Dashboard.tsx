@@ -5,11 +5,15 @@ import { Link } from 'react-router-dom';
 import { Plus, Search, Filter } from 'lucide-react';
 import { format } from 'date-fns';
 import TodoModal from '../components/TodoModal';
+import DeleteModal from '../components/DeleteModal';
+import toast from 'react-hot-toast';
+import type { Todo } from '../types';
 
 export default function Dashboard() {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [todoToDelete, setTodoToDelete] = useState<Todo | null>(null);
   
   const queryClient = useQueryClient();
 
@@ -22,19 +26,26 @@ export default function Dashboard() {
     mutationFn: todoService.deleteTodo,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['todos'] });
+      toast.success('Todo deleted');
     },
   });
 
-  const handleDelete = (id: string) => {
-    if (confirm('Are you sure you want to delete this task?')) {
-      deleteMutation.mutate(id);
+  const confirmDelete = () => {
+    if (todoToDelete) {
+      deleteMutation.mutate(todoToDelete._id);
+      setTodoToDelete(null);
     }
   };
 
   const toggleStatusMutation = useMutation({
     mutationFn: ({ id, status }: { id: string; status: string }) => todoService.updateTodo(id, { status: status as any }),
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['todos'] });
+      if (variables.status === 'COMPLETED') {
+        toast.success('Marked complete');
+      } else {
+        toast.success('Todo updated');
+      }
     },
   });
 
@@ -153,7 +164,7 @@ export default function Dashboard() {
                   View
                 </Link>
                 <button 
-                  onClick={() => handleDelete(todo._id)}
+                  onClick={() => setTodoToDelete(todo)}
                   className="text-sm px-3 py-1.5 text-red-600 hover:bg-red-50 rounded"
                 >
                   Delete
@@ -163,6 +174,13 @@ export default function Dashboard() {
           ))}
         </div>
       )}
+      
+      <DeleteModal 
+        isOpen={!!todoToDelete} 
+        onClose={() => setTodoToDelete(null)} 
+        onConfirm={confirmDelete} 
+        todoTitle={todoToDelete?.title || ''} 
+      />
     </div>
   );
 }
