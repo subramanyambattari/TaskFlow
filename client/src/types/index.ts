@@ -1,5 +1,6 @@
 export type Status = 'TODO' | 'IN_PROGRESS' | 'COMPLETED';
 export type Priority = 'LOW' | 'MEDIUM' | 'HIGH';
+export type Category = 'WORK' | 'PERSONAL' | 'HEALTH' | 'EDUCATION';
 
 export interface Todo {
   _id: string;
@@ -7,6 +8,7 @@ export interface Todo {
   description?: string;
   status: Status;
   priority: Priority;
+  category?: Category;
   dueDate?: string;
   createdAt: string;
   updatedAt: string;
@@ -17,6 +19,7 @@ export interface CreateTodoInput {
   description?: string;
   status?: Status;
   priority?: Priority;
+  category?: Category;
   dueDate?: string | null;
 }
 

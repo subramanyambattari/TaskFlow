@@ -5,6 +5,7 @@ export interface ITodo extends Document {
   description?: string;
   status: 'TODO' | 'IN_PROGRESS' | 'COMPLETED';
   priority: 'LOW' | 'MEDIUM' | 'HIGH';
+  category?: 'WORK' | 'PERSONAL' | 'HEALTH' | 'EDUCATION';
   dueDate?: Date;
   createdAt: Date;
   updatedAt: Date;
@@ -24,6 +25,10 @@ const TodoSchema = new Schema<ITodo>(
       enum: ['LOW', 'MEDIUM', 'HIGH'],
       default: 'MEDIUM',
     },
+    category: {
+      type: String,
+      enum: ['WORK', 'PERSONAL', 'HEALTH', 'EDUCATION'],
+    },
     dueDate: { type: Date },
   },
   {
@@ -33,6 +38,7 @@ const TodoSchema = new Schema<ITodo>(
 
 TodoSchema.index({ status: 1 });
 TodoSchema.index({ priority: 1 });
+TodoSchema.index({ category: 1 });
 TodoSchema.index({ dueDate: 1 });
 TodoSchema.index({ createdAt: -1 });
 

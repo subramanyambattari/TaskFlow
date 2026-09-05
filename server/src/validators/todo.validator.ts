@@ -6,6 +6,7 @@ export const createTodoSchema = z.object({
     description: z.string().max(500).optional(),
     status: z.enum(['TODO', 'IN_PROGRESS', 'COMPLETED']).optional(),
     priority: z.enum(['LOW', 'MEDIUM', 'HIGH']).optional(),
+    category: z.enum(['WORK', 'PERSONAL', 'HEALTH', 'EDUCATION']).optional(),
     dueDate: z.string().datetime().optional().or(z.date().optional()),
   }),
 });
@@ -16,6 +17,7 @@ export const updateTodoSchema = z.object({
     description: z.string().max(500).optional(),
     status: z.enum(['TODO', 'IN_PROGRESS', 'COMPLETED']).optional(),
     priority: z.enum(['LOW', 'MEDIUM', 'HIGH']).optional(),
+    category: z.enum(['WORK', 'PERSONAL', 'HEALTH', 'EDUCATION']).optional(),
     dueDate: z.string().datetime().optional().or(z.date().optional()),
   }),
 });

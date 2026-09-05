@@ -17,6 +17,7 @@ export default function TodoModal({ isOpen, onClose, todo }: TodoModalProps) {
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState('MEDIUM');
   const [status, setStatus] = useState('TODO');
+  const [category, setCategory] = useState('WORK');
   const [dueDate, setDueDate] = useState('');
 
   useEffect(() => {
@@ -25,6 +26,7 @@ export default function TodoModal({ isOpen, onClose, todo }: TodoModalProps) {
       setDescription(todo?.description || '');
       setPriority(todo?.priority || 'MEDIUM');
       setStatus(todo?.status || 'TODO');
+      setCategory(todo?.category || 'WORK');
       setDueDate(todo?.dueDate ? new Date(todo.dueDate).toISOString().split('T')[0] : '');
     }
   }, [isOpen, todo]);
@@ -66,6 +68,7 @@ export default function TodoModal({ isOpen, onClose, todo }: TodoModalProps) {
       description: description || undefined, 
       priority: priority as any, 
       status: status as any, 
+      category: category as any,
       dueDate: formattedDate 
     };
 
@@ -125,10 +128,13 @@ export default function TodoModal({ isOpen, onClose, todo }: TodoModalProps) {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">
-                Tags <span className="font-normal text-gray-400 normal-case">(optional)</span>
-              </label>
-              <input type="text" className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="project, focus, etc." />
+              <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">Category</label>
+              <select value={category} onChange={e => setCategory(e.target.value)} className="w-full border border-gray-300 rounded-lg px-4 py-2.5 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow">
+                <option value="WORK">Work</option>
+                <option value="PERSONAL">Personal</option>
+                <option value="HEALTH">Health</option>
+                <option value="EDUCATION">Education</option>
+              </select>
             </div>
           </div>
           
