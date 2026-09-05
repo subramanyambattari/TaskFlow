@@ -73,12 +73,18 @@ export default function TodoDetails() {
             <p className="text-gray-800 whitespace-pre-wrap">{todo.description || 'No description provided.'}</p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-6 border-t">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-6 pt-6 border-t">
             <div>
               <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Status</p>
               <p className="font-medium text-gray-900 flex items-center gap-2">
                 {todo.status === 'COMPLETED' ? <CheckCircle size={16} className="text-green-500" /> : <Clock size={16} className="text-blue-500" />}
                 {todo.status.replace('_', ' ')}
+              </p>
+            </div>
+            <div>
+              <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Category</p>
+              <p className="font-medium text-gray-900">
+                {todo.category || 'N/A'}
               </p>
             </div>
             <div>

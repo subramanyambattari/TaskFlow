@@ -142,6 +142,11 @@ export default function Dashboard() {
                   <span className="text-xs px-2 py-1 rounded-full font-medium bg-gray-100 text-gray-600">
                     {todo.status.replace('_', ' ')}
                   </span>
+                  {todo.category && (
+                    <span className="text-xs px-2 py-1 rounded-full font-medium bg-purple-100 text-purple-700">
+                      {todo.category}
+                    </span>
+                  )}
                 </div>
                 {todo.description && (
                   <p className="text-gray-600 text-sm line-clamp-2 mb-2">{todo.description}</p>
